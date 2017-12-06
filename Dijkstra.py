@@ -4,6 +4,7 @@ import networkx as nx
 import numpy as n
 import sys
 import matplotlib.pyplot as plt
+import random
 
 import networkx as nx
 import numpy as np
@@ -21,7 +22,11 @@ def Dijkstra(G , vi):
 
     for v,data in G.nodes(data=True):
         Q[v] = np.inf
-        predecessor[v] = 'null'    
+        predecessor[v] = 'null' 
+
+    for e,x in G.edges():
+        if ('weight' not in G[e][x]):
+            G[e][x]['weight'] = 1.0   
     
     Q[vi] = 0.0
     predecessor[vi] = None
@@ -35,15 +40,18 @@ def Dijkstra(G , vi):
 
     while Q:
         u = min(Q,key = Q.get)
-        print(u)
+        print("u", u)
+        print(Q[u])
+
         #del Q[u]
         
         for vizinho in G[u]:
-        	#print("Vizinho", vizinho)
+        	print("Vizinho", vizinho)
         	if vizinho in Q:
         		if Q[vizinho] > Q[u] + G[u][vizinho]['weight']:
-        			predecessor[vizinho] = 0
+        			predecessor[vizinho] = u
         			Q[vizinho] = Q[u] + G[u][vizinho]['weight'] 
+        #print("Fim", Q[u])
         del Q[u]
 
         if predecessor[u] is not 'null':
@@ -80,9 +88,18 @@ def onclick(event):
         j = j + 1
 
     event.canvas.draw()
-
+"""
 A = n.loadtxt('wg59_dist.txt')
-G = nx.from_numpy_matrix(A)
+G = nx.from_numpy_matrix(A)"""
+
+G = nx.gnm_random_graph(5, 6)
+
+#Da pesos aleatórios de 1 a 10 às arestas do grafo.
+
+import random
+for (u, v) in G.edges():
+    G[u][v]['weight'] = random.randint(1,10)
+
 
 for v in G.nodes():
 	vf = v
