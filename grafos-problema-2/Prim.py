@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 
 toggle = True
 G = nx.Graph()
-H = {}
 j = 0
 
 def Prim(G = nx.Graph(), R = None):
@@ -36,12 +35,11 @@ def Prim(G = nx.Graph(), R = None):
             for v1,v2,data in G.edges(data=True):
                 if (v1 == predecessor[u] and v2 == u):
                     MST.add_edge(v1,v2, weight=data['weight']) 
-                    H[i] = MST.copy() 
-                    i = i + 1
+                    H = MST.copy() 
                 elif (v1 == u and v2 == predecessor[u]):
                     MST.add_edge(v2,v1, weight=data['weight'])
-                    H[i] = MST.copy()
-                    i = i + 1
+                    H = MST.copy()
+    return H
 
 def onclick(event):
     global toggle
@@ -59,18 +57,17 @@ def onclick(event):
     
     else:
         labels = {}
-	for v1,v2,data in H[j].edges(data=True):
+	for v1,v2,data in H.edges(data=True):
             labels[(v1,v2)] = data['weight']
-        nx.draw(H[j], pos, with_labels=True)
-        nx.draw_networkx_edge_labels(H[j], pos, labels)
-        j = j + 1
+        nx.draw(H, pos, with_labels=True)
+        nx.draw_networkx_edge_labels(H, pos, labels)
 
     event.canvas.draw()
 
 A = np.loadtxt('ha30_dist.txt')
 G = nx.from_numpy_matrix(A)
 
-Prim(G, 0)
+H = Prim(G, 0)
 
 pos = nx.spring_layout(G)
 fig = plt.figure()
