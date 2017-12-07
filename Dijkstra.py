@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 
 toggle = True
 G = nx.Graph()
-#H = {}
 j = 0
 
 def Dijkstra(G , vi, vf, vm):
@@ -79,19 +78,11 @@ def onclick(event):
             labels[(v1,v2)] = data['weight']
         nx.draw(H, pos, with_labels=True)
         nx.draw_networkx_edge_labels(H, pos, labels)
-        j = j + 1
 
     event.canvas.draw()
 
 A = n.loadtxt('wg59_dist.txt')
 G = nx.from_numpy_matrix(A)
-
-#G = nx.gnm_random_graph(10, 15)
-
-#Da pesos aleatórios de 1 a 10 às arestas do grafo.
-
-'''for (u, v) in G.edges():
-    G[u][v]['weight'] = random.randint(1,10)'''
 
 
 for v in G.nodes():
