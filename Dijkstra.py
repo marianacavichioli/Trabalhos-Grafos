@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import networkx as nx
 import numpy as n
-import sys
 import matplotlib.pyplot as plt
 import random
 
@@ -12,10 +11,10 @@ import matplotlib.pyplot as plt
 
 toggle = True
 G = nx.Graph()
-H = {}
+#H = {}
 j = 0
 
-def Dijkstra(G , vi):
+def Dijkstra(G , vi, vf, vm):
     i = 0
     Q  = {}
     predecessor = {}
@@ -30,41 +29,36 @@ def Dijkstra(G , vi):
     
     Q[vi] = 0.0
     predecessor[vi] = None
-
-    '''
-    Q[vf] = 0
+    Q[vf] = 0.0
     predecessor[vf] = None
-    '''
+    Q[vm] = 0.0
+    predecessor[vm] = None
 
     MST  = nx.create_empty_copy(G) 
 
     while Q:
         u = min(Q,key = Q.get)
-        print("u", u)
-        print(Q[u])
-
-        #del Q[u]
         
         for vizinho in G[u]:
-        	print("Vizinho", vizinho)
         	if vizinho in Q:
         		if Q[vizinho] > Q[u] + G[u][vizinho]['weight']:
         			predecessor[vizinho] = u
         			Q[vizinho] = Q[u] + G[u][vizinho]['weight'] 
-        #print("Fim", Q[u])
+
         del Q[u]
 
         if predecessor[u] is not 'null':
             for v1,v2,data in G.edges(data=True):
                 if (v1 == predecessor[u] and v2 == u):
                     MST.add_edge(v1,v2, weight=data['weight']) 
-                    H[i] = MST.copy() 
+                    H = MST.copy() 
                     i = i + 1
                 elif (v1 == u and v2 == predecessor[u]):
                     MST.add_edge(v2,v1, weight=data['weight'])
-                    H[i] = MST.copy()
+                    H = MST.copy()
                     i = i + 1
-
+    return H
+           
 def onclick(event):
     global toggle
     global j
@@ -81,32 +75,34 @@ def onclick(event):
     
     else:
         labels = {}
-	for v1,v2,data in H[j].edges(data=True):
+	for v1,v2,data in H.edges(data=True):
             labels[(v1,v2)] = data['weight']
-        nx.draw(H[j], pos, with_labels=True)
-        nx.draw_networkx_edge_labels(H[j], pos, labels)
+        nx.draw(H, pos, with_labels=True)
+        nx.draw_networkx_edge_labels(H, pos, labels)
         j = j + 1
 
     event.canvas.draw()
-"""
-A = n.loadtxt('wg59_dist.txt')
-G = nx.from_numpy_matrix(A)"""
 
-G = nx.gnm_random_graph(5, 6)
+A = n.loadtxt('wg59_dist.txt')
+G = nx.from_numpy_matrix(A)
+
+#G = nx.gnm_random_graph(10, 15)
 
 #Da pesos aleatórios de 1 a 10 às arestas do grafo.
 
-import random
-for (u, v) in G.edges():
-    G[u][v]['weight'] = random.randint(1,10)
+'''for (u, v) in G.edges():
+    G[u][v]['weight'] = random.randint(1,10)'''
 
 
 for v in G.nodes():
 	vf = v
 
 vi = 0
+vm = vf/2
 
-Dijkstra(G, vi)
+print(vi, vm, vf)
+
+H = Dijkstra(G, vi, vf, vm)
 
 pos = nx.spring_layout(G)
 fig = plt.figure()
