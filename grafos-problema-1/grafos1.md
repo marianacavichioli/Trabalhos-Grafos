@@ -9,6 +9,35 @@ Com base nas informações, responda:
 
 ### a) Especifique o diagrama de estados da cadeia de Markov que representa o jogo, computando para isso a matriz de transição de estados P
 
+```python
+
+[](script/itemA.py)
+
+# a) Especifique o diagrama de estados da cadeia
+# de Markov que representa o jogo, computando
+# para isso a matriz de transição de estados P
+
+import networkx as nx
+import matplotlib.pyplot as plt
+import sys
+sys.path.append("./src")
+
+from dataset import createFromDataset
+from matrix import getSTM
+
+# create graph
+G = nx.DiGraph()
+G = createFromDataset()
+
+# get state transition matrix
+P = getSTM(G)
+
+print(nx.info(G))
+nx.draw(G)
+plt.show()
+
+```
+
 ### b) Desenvolva um script em Python para calcular a distribuição estacionária da cadeia de Markov homogênea em questão. Qual é a probabilidade de um jogador vencer o jogo, ou seja, qual a probabilidade de se atingir o estado 36 no longo prazo? Considere k = 100 um número suficiente de iterações no Power Method. Quais os estados mais prováveis de serem acessados?
 
 ### c) Especifique a matriz P_ (P_barra) referente ao modelo Pagerank considerando alpha = 0.1. Considerando k = 100, aplique o Power method e compare o resultado com o obtido no item b). As distribuições estacionárias obtidas em b) e c) são iguais ou diferentes?
