@@ -1,46 +1,41 @@
-import networkx as nx 
-import numpy as n
+import networkx as nx
+import numpy as np
+from matplotlib import pyplot as plt
 
-def DFS(G,s):
-	cor = {}
-	pred = {}
-	d = {}
-	f = {}
+G = nx.read_pajek('karate.paj') #coloca o grafo do arquivo em G
+r = 1 #vertice raiz
 
-	tempo = 0
-
-	for v in G.nodes():
-        cor[v]  = 'branco' # cores possíveis: branco cinza e preto
-        pred[v] = None
-
+def BFS(G,s): 
+    cor = {} #declara vetor de cores
+    pred = {} 
+    d = {}
     for v in G.nodes():
-        if cor[v] == 'branco':
-            tempo = visit(G, v, cor, pred, d, f, tempo)
-
+        Q[v] = np.inf
+        cor[v] = 'branco'
+        pred[v] = None
+    cor[s] = 'cinza'
+    d[s] = 0
+    Q = [s]
+    while Q:
+        u = Q.pop(0)
+        for v in G.neighbors(u):
+            if cor[v] == 'branco':
+                cor[v] = 'cinza'
+                d[v] = d[u] + 1
+                pred[v] = u
+                Q.append(v)
+        cor[u] = 'preto'
     H = nx.create_empty_copy(G)
-
     for v1,v2,data in G.edges(data=True):
         if (pred[v2] is v1) or (pred[v1] is v2 and not nx.is_directed(H)):
-            H.add_edge( v1, v2, data )
-            H.node[v1]['begin_time'] = d[v1]
-            H.node[v2]['begin_time'] = d[v2]
-            H.node[v1]['finish_time'] = f[v1]
-            H.node[v2]['finish_time'] = f[v2]
-
+            H.add_edge(v1,v2,data)
+            H.node[v1]['depth'] = d[v1]
+            H.node[v2]['depth'] = d[v2]
     return H
 
-def visit(G, s, cor, pred, d, f, tempo):
-    tempo  = tempo + 1
-    d[s]   = tempo
-    cor[s] = 'cinza'
 
-    for v in G[s]:
-        if cor[v] == 'branco':
-            pred[v] = s
-            tempo = visit(G, v, cor, pred, d, f, tempo)
 
-    cor[s] = 'preto'
-    tempo = tempo + 1
-    f[s] = tempo
-
-return tempo
+H = BFS(G,1)
+nx.draw_networkx(G)
+plt.savefig('BFS_karate.pdf')
+plt.show()
