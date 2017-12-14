@@ -3,7 +3,6 @@ import numpy as np
 def getSTM(G):
     # save the adjency matrix
 
-    # init probability matrix (pmatrix)
     # init adjacency matrix (amatrix)
     # init result matrix (state transition matrix - stmatrix)
     amatrix = np.array([[0. for i in range(G.number_of_nodes())] for j in range(G.number_of_nodes())])
@@ -14,8 +13,8 @@ def getSTM(G):
     edges = edgeFile.readlines()
     for line in edges:
         amatrix[int(line.split(" ")[0])-1][int(line.split(" ")[1]) - 1] += 1
-        amatrix[int(line.split(" ")[1])-1][int(line.split(" ")[0]) - 1] += 1
     edgeFile.close()
+    print(amatrix)
 
     # create pmatrix
     for v in G.nodes():

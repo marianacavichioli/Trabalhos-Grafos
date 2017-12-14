@@ -17,6 +17,8 @@ G = createFromDataset()
 # get state transition matrix
 P = getSTM(G)
 
+print(P)
+
 print(nx.info(G))
 nx.draw(G)
 plt.show()
