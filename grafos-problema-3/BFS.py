@@ -28,8 +28,8 @@ def BFS(G,s):
     for v1,v2 in G.edges():
         if (pred[v2] is v1) or (pred[v1] is v2 and not nx.is_directed(H)):
             H.add_edge( v1,v2 )
-            H.node[v1]['depth'] = d[v1]
-            H.node[v2]['depth'] = d[v2]
+            H.node[v1] = d[v1]
+            H.node[v2] = d[v2]
     return H
 
 # Cria grafo G
@@ -47,7 +47,7 @@ H = BFS(G1, s)
 # Salva as profundidades cada nó de H em labels
 labels = {}
 for v in H.nodes():
-    labels[v] = H.node[v]['depth']
+    labels[v] = H.node[v]
 
 # Retorna um dicionário de posições codificadas por nó
 pos = nx.spring_layout(H)
