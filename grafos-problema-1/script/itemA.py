@@ -16,8 +16,12 @@ G = createFromDataset()
 
 # get state transition matrix
 P = getSTM(G)
-print(P)
+
+for u, v in G.edges:
+	G[u][v]['weight'] = P[u-1][v-1]
+
 
 print(nx.info(G))
+nx.spring_layout(G)
 nx.draw(G)
 plt.show()
